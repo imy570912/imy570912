@@ -1,0 +1,517 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引入dubbo的实战记录
+我们为什么要引入dubbo？刚进入诺亚那会，java这边差不多十几个项目，其中包含前置系统，订单系统，支付系统，库存系统，基础数据服务系统等等，这些系统之间当时都是采用http请求或者jsonrpc的方式来调用（当然还有mq，后面开单独章节说明），我们有4套环境：一套开发环境，两套测试环境，一套生产环境，现在假设一个请求从php到前置系统，前置系统再调用订单系统，订单系统">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/引入dubbo的实战记录/引入dubbo的实战记录.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="引入dubbo的实战记录
+我们为什么要引入dubbo？刚进入诺亚那会，java这边差不多十几个项目，其中包含前置系统，订单系统，支付系统，库存系统，基础数据服务系统等等，这些系统之间当时都是采用http请求或者jsonrpc的方式来调用（当然还有mq，后面开单独章节说明），我们有4套环境：一套开发环境，两套测试环境，一套生产环境，现在假设一个请求从php到前置系统，前置系统再调用订单系统，订单系统">
+<meta property="og:updated_time" content="2017-02-23T12:50:33.837Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="引入dubbo的实战记录
+我们为什么要引入dubbo？刚进入诺亚那会，java这边差不多十几个项目，其中包含前置系统，订单系统，支付系统，库存系统，基础数据服务系统等等，这些系统之间当时都是采用http请求或者jsonrpc的方式来调用（当然还有mq，后面开单独章节说明），我们有4套环境：一套开发环境，两套测试环境，一套生产环境，现在假设一个请求从php到前置系统，前置系统再调用订单系统，订单系统">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/引入dubbo的实战记录/引入dubbo的实战记录.html"/>
+
+
+
+
+
+  <title>
+  
+
+  
+     | Hexo
+  
+</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+  <header class="post-header">
+
+	<h2 class="post-title" itemprop="name headline"></h2>
+
+
+
+</header>
+
+    
+    
+      <h1 id="引入dubbo的实战记录"><a href="#引入dubbo的实战记录" class="headerlink" title="引入dubbo的实战记录"></a>引入dubbo的实战记录</h1><hr>
+<h2 id="我们为什么要引入dubbo？"><a href="#我们为什么要引入dubbo？" class="headerlink" title="我们为什么要引入dubbo？"></a>我们为什么要引入dubbo？</h2><p>刚进入诺亚那会，java这边差不多十几个项目，其中包含前置系统，订单系统，支付系统，库存系统，基础数据服务系统等等，这些系统之间当时都是采用http请求或者jsonrpc的方式来调用（当然还有mq，后面开单独章节说明），我们有4套环境：一套开发环境，两套测试环境，一套生产环境，现在假设一个请求从php到前置系统，前置系统再调用订单系统，订单系统再调用支付系统，库存系统，基础数据服务系统（假设调用n个系统），那么在订单系统中就必须得配置支付系统，库存系统等的IP地址或者域名，然后还有4套环境，这样在订单系统中至少需要配置4 * n个url，随着项目的不停增加，服务器资源也会不停增加，这些url维护起来会越来越困难，经常碰到的是，项目上生产了，发现url配置错了。后来决心引入dubbo来解决这些问题 。</p>
+<p>使用dubbo，引入了注册中心这个角色（我们当时选用的是zookeeper作为注册中心），动态的去注册和发现服务，不需要再通过配置url的方式来调用服务，并且通过http调用，都由nginx来做负载均衡，导致nginx服务器压力过大，使用dubbo，各应用之间的调用都由dubbo来提供负载均衡，减轻了nginx的压力。项目之间的启动也是有先后顺序的，随着系统越来越多，这种顺序也比较难维护，dubbo也提供了可视化的服务依赖关系。</p>
+<h2 id="引入dubbo步骤"><a href="#引入dubbo步骤" class="headerlink" title="引入dubbo步骤"></a>引入dubbo步骤</h2><h3 id="1-安装zookeeper（后面简称zk）"><a href="#1-安装zookeeper（后面简称zk）" class="headerlink" title="1. 安装zookeeper（后面简称zk）"></a>1. 安装zookeeper（后面简称zk）</h3><p>我们先<a href="https://www.baidu.com" target="_blank" rel="external">安装zk</a>。首先下载zookeeper-3.4.8.tar.gz，解压缩后，进入conf目录，重命名zoo_sample.cfg为zoo.cfg，如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd zookeeper-3.4.8/conf</div><div class="line">mv zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p>
+<p>然后编辑zoo.cfg，修改dataDir项为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dataDir=/var/lib/zookeeper（其他目录也可）</div></pre></td></tr></table></figure></p>
+<p>按照下面的格式来配置你的zk服务器节点（添加在zoo.cfg中）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server.id=host:port:port</div></pre></td></tr></table></figure></p>
+<p>其中id用来标示该机器在集群中的机器序号，同时，在每台zk机器上我们还需要在数据目录（即dataDir参数指定的那个目录）下创建一个myid文件该文件只有一行内容，并且是一个数字，就是server.id中的id（id的范围是1-255），具体操作如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi myid</div></pre></td></tr></table></figure></p>
+<p>然后填入序号id，比如我们现在有3台zk服务器，分别为10.3.3.11,10.3.3.12,10.3.3.13 ，那么我们在zoo.cfg中会有如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.1=10.3.3.11:2888:3888</div><div class="line">server.2=10.3.3.12:2888:3888</div><div class="line">server.3=10.3.3.13:2888:3888</div></pre></td></tr></table></figure></p>
+<p>假如当前我们所在的是10.3.3.13服务器，那么我们的myid文件中应该为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">3</div></pre></td></tr></table></figure></p>
+<p>按照上面的步骤，为其他机器都配置上zoo.cfg和myid文件。进入zk的bin目录下启动服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zkServer.sh start</div></pre></td></tr></table></figure></p>
+<p>验证服务是否启动成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">telnet 127.0.0.1 2181</div></pre></td></tr></table></figure></p>
+<p>出现如下后，输入stat命令进行服务器启动的验证：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">Trying 127.0.0.1...</div><div class="line">Connected to localhost (127.0.0.1).</div><div class="line">Escape character is &apos;^]&apos;.</div><div class="line">stat</div><div class="line">Zookeeper version: 3.4.8--1, built on 02/06/2016 03:18 GMT</div><div class="line">Clients:</div><div class="line"> /10.21.40.61:49209[1](queued=0,recved=13257,sent=13257)</div><div class="line"> /10.4.86.19:52858[1](queued=0,recved=14427,sent=14739)</div><div class="line"> /10.21.40.55:56897[1](queued=0,recved=716767,sent=717946)</div><div class="line"> /10.21.40.61:36759[1](queued=0,recved=1249,sent=1257)</div><div class="line"> /10.21.40.61:36379[1](queued=0,recved=14159,sent=14454)</div><div class="line"> /10.4.86.100:54715[1](queued=0,recved=0,sent=0)</div><div class="line"> /10.21.40.61:45895[1](queued=0,recved=235824,sent=235890)</div><div class="line"> /10.4.86.79:54827[1](queued=0,recved=0,sent=0)</div><div class="line"> /10.21.40.61:33516[1](queued=0,recved=2684,sent=2732)</div><div class="line"> /10.21.40.55:46251[1](queued=0,recved=847196,sent=881416)</div><div class="line"> /10.4.164.191:39687[1](queued=0,recved=1603,sent=1603)</div><div class="line"> /10.21.40.61:51135[1](queued=0,recved=7123,sent=7235)</div><div class="line"> /10.21.40.55:42206[0](queued=0,recved=1,sent=0)</div><div class="line"> /10.4.164.191:40234[1](queued=0,recved=281,sent=281)</div><div class="line"> /10.4.86.45:55863[1](queued=0,recved=0,sent=0)</div><div class="line"> /10.21.40.61:60827[1](queued=0,recved=13439,sent=13687)</div><div class="line"> /10.21.40.55:56216[1](queued=0,recved=598291,sent=598292)</div><div class="line"> /10.21.40.61:55145[1](queued=0,recved=729,sent=729)</div><div class="line"> /10.21.40.61:34212[1](queued=0,recved=14031,sent=14056)</div><div class="line"></div><div class="line">Latency min/avg/max: 0/0/1247</div><div class="line">Received: 14681449</div><div class="line">Sent: 14763271</div><div class="line">Connections: 19</div><div class="line">Outstanding: 0</div><div class="line">Zxid: 0x6cafa</div><div class="line">Mode: standalone</div><div class="line">Node count: 362</div><div class="line">Connection closed by foreign host.</div></pre></td></tr></table></figure></p>
+<p>出现如上面的信息，就说明服务正常启动了。</p>
+<h3 id="2-再来下载运行dubbo"><a href="#2-再来下载运行dubbo" class="headerlink" title="2. 再来下载运行dubbo"></a>2. 再来下载运行dubbo</h3><p>首先我们去github上面down下来dubbo或者dubbox的代码，这里我们选用dubbox。找到dubbo-admin模块下面的dubbo.properties配置文件，其中有3项如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dubbo.registry.address=10.3.3.11:2181,10.3.3.12:2181,10.3.3.13:2181</div><div class="line">dubbo.admin.root.password=root</div><div class="line">dubbo.admin.guest.password=guest</div></pre></td></tr></table></figure></p>
+<p>其中第一项，即是注册中心的地址，第二项和第三项分别是管理界面两个账户的密码（用户名和密码相同），这两项我们不做修改，仅将注册中心修改为我们自己的地址即可，然后用maven打包运行起来即可。至此应用之间的中间件已经运行起来，开始提供服务。</p>
+<h3 id="3-应用中服务提供者和服务消费者的配置"><a href="#3-应用中服务提供者和服务消费者的配置" class="headerlink" title="3. 应用中服务提供者和服务消费者的配置"></a>3. 应用中服务提供者和服务消费者的配置</h3><p>先来看服务提供者配置，首先引入需要的jar包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.github.sgroschupf&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;zkclient&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;0.1&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line"></div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.apache.zookeeper&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;zookeeper&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;3.4.6&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;!-- 在引入dubbo依赖的时候为了防止jar包冲突，将spring的jar排除掉--&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</div><div class="line">&lt;artifactId&gt;dubbo&lt;/artifactId&gt;</div><div class="line">&lt;version&gt;2.8.4&lt;/version&gt;</div><div class="line">&lt;exclusions&gt;</div><div class="line">    &lt;exclusion&gt;</div><div class="line">        &lt;groupId&gt;org.springframework&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring&lt;/artifactId&gt;</div><div class="line">    &lt;/exclusion&gt;</div><div class="line">&lt;/exclusions&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
+<p>在spring-dubbo.xml（名字随便取）中配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 提供方应用名称信息，名字随便取，但是不要重复，dubbo管理页面比较清晰看出是哪个应用暴露出来的 --&gt;</div><div class="line">&lt;dubbo:application name=&quot;dubbo-provider&quot;/&gt;</div><div class="line"></div><div class="line">&lt;!-- 注册中心地址（这里不局限于zookeeper作为注册中心，可以使用数据库或者multicast，redis等注册中心都可以） 说明：check=false：注册中心不存在时是否报错，上线是修改成true，方便及时发现问题；timeout注册中心请求超时时间（毫秒）；如果zk是集群配置的话，address可用逗号隔开 --&gt;</div><div class="line">&lt;dubbo:registry protocol=&quot;zookeeper&quot; address=&quot;10.21.40.55:2181&quot; check=&quot;true&quot;/&gt;</div><div class="line"></div><div class="line">&lt;!--使用默认的dubbo协议在20880端口暴露服务，host属性和name属性不需要配置，name即协议名称，默认使用dubbo协议，host为需要暴露的主机ip，可以不配置，dubbo能自动获取暴露服务的主机名称--&gt;</div><div class="line">&lt;!-- accesslog:每一次调用都会打印出log，dubbo默认的日志策略为log4j，此日志容量比较大，建议仅仅输出在控制台 --&gt;</div><div class="line">&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;20880&quot; accesslog=&quot;true&quot;/&gt;</div><div class="line">&lt;!--&lt;dubbo:protocol name=&quot;http&quot; port=&quot;20881&quot; accesslog=&quot;true&quot;/&gt;--&gt;</div><div class="line"></div><div class="line">&lt;!-- 本应用暴露出去的服务。其中timeout属性设置为调用服务的超时时间，超时时间建议由服务提供方设置，因为你提供服务肯定大概知道方法执行需要多久，如果消费方同时消费多个服务，就不需要关心每个服务的超时时间，因为每个服务的提供者都设置了超时时间 --&gt;</div><div class="line">&lt;!-- protocol:可选择多种协议来暴露此服务，比如还可以用http，hessian等协议 --&gt;</div><div class="line">&lt;!-- 如果一个接口有多个实现，可以使用group区分，引用方引用的时候，可以加上group属性来决定引用哪一组服务 --&gt;</div><div class="line">&lt;!--ref为bean的名称--&gt;</div><div class="line">&lt;dubbo:service interface=&quot;com.dubbox.provider.api.ProviderService&quot; group=&quot;11&quot; ref=&quot;providerServiceImpl&quot; timeout=&quot;40000&quot; protocol=&quot;dubbo&quot;&gt;</div><div class="line">    &lt;!-- 针对方法级别的配置，超时为20000毫秒 --&gt;</div><div class="line">    &lt;dubbo:method name=&quot;ProviderSomething1&quot; timeout=&quot;20000&quot;/&gt;</div><div class="line">    &lt;!-- 针对方法级别的配置，超时20000毫秒 --&gt;</div><div class="line">    &lt;dubbo:method name=&quot;ProviderSomething2&quot; timeout=&quot;20000&quot;/&gt;</div><div class="line">&lt;/dubbo:service&gt;</div><div class="line">&lt;dubbo:service interface=&quot;com.dubbox.provider.api.ProviderService&quot; group=&quot;22&quot; ref=&quot;providerServiceImpl1&quot; timeout=&quot;40000&quot; protocol=&quot;dubbo&quot;&gt;</div><div class="line">&lt;/dubbo:service&gt;</div><div class="line">&lt;!-- dubbo自定义扫描注解 --&gt;</div><div class="line">&lt;dubbo:annotation package=&quot;com.dubbox.provider&quot; /&gt;</div></pre></td></tr></table></figure></p>
+<p>服务消费方所需jar包和服务提供方一样，配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;dubbo:application name=&quot;dubbo-consumer&quot;&gt;&lt;/dubbo:application&gt;</div><div class="line">&lt;!-- 使用zookeeper注册中心暴露服务地址 --&gt;</div><div class="line">&lt;dubbo:registry address=&quot;zookeeper://10.21.40.55:2181&quot; check=&quot;false&quot;&gt;&lt;/dubbo:registry&gt;</div><div class="line">&lt;dubbo:annotation package=&quot;com.dubbox.service&quot; /&gt;</div><div class="line">&lt;!-- 要引用的服务，引用服务的时候可以使用注解的方式添加调用服务的版本号，check=true：没有服务提供者时报错，如果需要点对点连接，可以使用url属性来配置需要消费的节点ip--&gt;</div><div class="line">&lt;!--如果服务提供方Spring容器是懒加载的，或者通过API编程延迟引用服务，请关闭check，否则服务临时不可用时，会抛出异常（消费方容器初始化的时候，会判断服务是否可用，这个时候，服务提供方的服务还未被spring加载，所以会显示服务不可用），如果check=false，总是会返回引用，当服务恢复时，能自动连上--&gt;</div><div class="line">&lt;!-- 如果某一个服务节点不可用时，会自动重试，retries字段配置的就是重试的次数 --&gt;</div><div class="line">&lt;!-- loadbalance:配置当前消费服务的轮训方式，这里配置为roundrobin轮询方式（这种轮询方式不能根据服务器处理能力的不同来负载） --&gt;</div><div class="line">&lt;dubbo:reference interface=&quot;com.dubbox.provider.api.ProviderService&quot; group=&quot;11&quot; id=&quot;aaaa&quot; check=&quot;true&quot; retries=&quot;2&quot; loadbalance=&quot;roundrobin&quot;&gt;</div><div class="line">    &lt;dubbo:method name=&quot;providerSomething1&quot;/&gt;</div><div class="line">    &lt;dubbo:method name=&quot;providerSomething2&quot;/&gt;</div><div class="line">&lt;/dubbo:reference&gt;</div></pre></td></tr></table></figure></p>
+<p>至此，消费方和提供方配置完成。当然，这里只是dubbo非常基本的一些配置项，更多的配置项可以去官网dubbo.io上面查阅，<strong>由于以上配置是我做测试的时候用的，所以一些注释和命名略显不太规范</strong>。<br>接下来我们看下服务提供方的接口和实现类，先看接口类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.dubbox.provider.api;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.dubbox.provider.api.exception.StockException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@author</span> 吴镇</div><div class="line"> * <span class="doctag">@description</span>:服务提供方接口</div><div class="line"> * <span class="doctag">@createdate</span> 2016/8/12</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ProviderService</span> </span>&#123;</div><div class="line">    <span class="function">String <span class="title">ProviderSomething1</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function">String <span class="title">ProviderSomething2</span><span class="params">()</span> <span class="keyword">throws</span> StockException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>再来看实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.dubbox.provider.service;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.dubbox.provider.api.ProviderService;</div><div class="line"><span class="keyword">import</span> com.dubbox.provider.api.exception.ResponseCode;</div><div class="line"><span class="keyword">import</span> com.dubbox.provider.api.exception.StockException;</div><div class="line"><span class="keyword">import</span> org.slf4j.Logger;</div><div class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</div><div class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@author</span> 吴镇</div><div class="line"> * <span class="doctag">@description</span>:服务提供方实现</div><div class="line"> * <span class="doctag">@createdate</span> 2016/8/12</div><div class="line"> */</div><div class="line"><span class="meta">@Service</span>(value = <span class="string">"providerServiceImpl"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProviderServiceImpl</span> <span class="keyword">implements</span> <span class="title">ProviderService</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LoggerFactory.getLogger(ProviderServiceImpl.class);</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">providerSomething1</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"I am a service provider,prvider 1~~"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">providerSomething2</span><span class="params">()</span> <span class="keyword">throws</span> StockException</span>&#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> StockException(ResponseCode.COMMUNICATION_ERROR);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里提供了两个方法来做测试，其中providerSomething1没什么好说的，在providerSomething2中比较特殊的是我们抛出了一个异常，StockException是我自定义的一个异常类，不去深究它，由于dubbo在方法抛出异常的时候需要做一些特殊的处理，这里先提一下，待会我们在原理讲解中再来说。其中的接口类ProviderService我们是将它放在一个单独的模块中（maven项目分模块），这里我们叫dubbox-api。</p>
+<p>再来看服务消费方如何调用提供方提供的服务，首先，我们需要将服务提供方的dubbox-api模块打成jar包，如果是maven项目的话先进入dubbox-api目录下，然后使用以下命令来打包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mvn clean</div><div class="line">mvn compile</div><div class="line">mvn package</div></pre></td></tr></table></figure></p>
+<p>以上命令执行后，我们可以看到target目录下生成一个dubbox-api-1.1.jar，如果公司有私服的话，将这个包上传到私服中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn deploy</div></pre></td></tr></table></figure></p>
+<p>然后在服务消费方引入这个jar包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.ifa.noah&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;web-api&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.1&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
+<p>现在我们可以<strong>像调用本地方法一样来调用服务提供方的方法</strong>了，服务消费方代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.dubbox.service;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.dubbox.provider.api.ProviderService;</div><div class="line"><span class="keyword">import</span> com.dubbox.provider.api.exception.StockException;</div><div class="line"><span class="keyword">import</span> org.slf4j.Logger;</div><div class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</div><div class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</div><div class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</div><div class="line"></div><div class="line"><span class="keyword">import</span> javax.annotation.Resource;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@author</span> 吴镇</div><div class="line"> * <span class="doctag">@description</span>:服务消费方</div><div class="line"> * <span class="doctag">@createdate</span> 2016/8/12</div><div class="line"> */</div><div class="line"><span class="meta">@Service</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestService</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LoggerFactory.getLogger(TestService.class);</div><div class="line"></div><div class="line">    <span class="meta">@Autowired</span></div><div class="line">    <span class="keyword">private</span> ProviderService provider;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDateFromDubbo</span><span class="params">()</span></span>&#123;</div><div class="line">        String str = <span class="string">""</span>;</div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            str = provider.ProviderSomething2();</div><div class="line">            System.out.println(str);</div><div class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</div><div class="line">            <span class="keyword">if</span>(e <span class="keyword">instanceof</span> StockException)&#123;</div><div class="line">                StockException stockException = (StockException) e;</div><div class="line">                LOGGER.info(<span class="string">"调用服务异常，异常码为：&#123;&#125;，异常信息为：&#123;&#125;"</span>, stockException.getResponseCode().getCode(),stockException.getResponseCode().getMsg());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> str;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意到，我们直接像注入本地的bean一样来注入提供方提供的服务。我们运行单元测试来调用getDateFromDubbo方法即可。到这里，我们的一个dubbo中间件的例子就完成了。</p>
+<h2 id="dubbo原理"><a href="#dubbo原理" class="headerlink" title="dubbo原理"></a>dubbo原理</h2><h2 id="zookeeper原理"><a href="#zookeeper原理" class="headerlink" title="zookeeper原理"></a>zookeeper原理</h2>
+    
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
